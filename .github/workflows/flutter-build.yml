@@ -28,32 +28,25 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # ✅ إضافة 1: إعداد Android SDK
+      # ✅ إعداد Android SDK
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # ✅ إضافة 2: إنشاء ملف local.properties (الحل الأساسي للمشكلة)
+      # ✅ إنشاء local.properties مع المسارين المطلوبين
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
-          echo "✅ local.properties created at android/local.properties"
+          echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> android/local.properties
+          echo "✅ local.properties created with:"
           cat android/local.properties
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-
-      - name: Regenerate Gradle Wrapper (fixes missing/corrupt gradle-wrapper.jar)
-        working-directory: android
-        run: gradle wrapper --gradle-version 8.13 --distribution-type all
+        with:
+          gradle-version: '8.13'
 
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Analyze project (non-blocking)
-        run: flutter analyze || true
-
-      - name: Run tests (if any)
-        run: flutter test || true
 
       - name: Build APK (release)
         run: flutter build apk --release
