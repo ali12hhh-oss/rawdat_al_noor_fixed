@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_colors.dart';
 import '../core/app_theme.dart';
@@ -33,7 +33,8 @@ class _LetterTracingState extends State<LetterTracing> {
   void _initGame() {
     final shuffledLetters = List.from(widget.letters);
     shuffledLetters.shuffle();
-    _gameLetters = shuffledLetters.take(8).toList();
+    // ✅ التصحيح: إضافة .cast<LetterModel>() لتحويل List<dynamic> إلى List<LetterModel>
+    _gameLetters = shuffledLetters.take(8).cast<LetterModel>().toList();
     _completedLetters = 0;
     _score = 0;
     _nextLetter();
