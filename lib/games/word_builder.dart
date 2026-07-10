@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_colors.dart';
 import '../core/app_theme.dart';
@@ -33,7 +33,8 @@ class _WordBuilderState extends State<WordBuilder> {
   void _initGame() {
     final shuffledWords = List.from(widget.words);
     shuffledWords.shuffle();
-    _gameWords = shuffledWords.take(5).toList();
+    // ✅ التصحيح: إضافة .cast<WordModel>() لتحويل List<dynamic> إلى List<WordModel>
+    _gameWords = shuffledWords.take(5).cast<WordModel>().toList();
     _completedWords = 0;
     _score = 0;
     _nextWord();
