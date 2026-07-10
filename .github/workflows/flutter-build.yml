@@ -28,6 +28,17 @@ jobs:
           channel: 'stable'
           cache: true
 
+      # ✅ إضافة 1: إعداد Android SDK
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      # ✅ إضافة 2: إنشاء ملف local.properties (الحل الأساسي للمشكلة)
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+          echo "✅ local.properties created at android/local.properties"
+          cat android/local.properties
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
