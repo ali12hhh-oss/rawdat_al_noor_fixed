@@ -38,41 +38,15 @@ jobs:
           echo "✅ local.properties created"
           cat android/local.properties
 
-      # ✅ تثبيت Gradle واستخدامه لإنشاء Wrapper
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.13'
-
-      # ✅ إنشاء Gradle Wrapper من الصفر
-      - name: Create Gradle Wrapper
-        working-directory: android
+      - name: Install Gradle 8.13
         run: |
-          echo "📦 Creating Gradle Wrapper..."
-          
-          # إنشاء مجلد wrapper إذا لم يكن موجوداً
-          mkdir -p gradle/wrapper
-          
-          # إنشاء ملف gradle-wrapper.properties
-          cat > gradle/wrapper/gradle-wrapper.properties << 'EOF'
-          distributionBase=GRADLE_USER_HOME
-          distributionPath=wrapper/dists
-          distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip
-          zipStoreBase=GRADLE_USER_HOME
-          zipStorePath=wrapper/dists
-          EOF
-          
-          # تحميل gradle-wrapper.jar من الإنترنت
-          curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.13.0/gradle/wrapper/gradle-wrapper.jar
-          
-          # منح صلاحيات التنفيذ
-          chmod +x gradlew
-          
-          # التحقق
-          echo "📁 Files created:"
-          ls -la gradle/wrapper/
+          echo "📦 Installing Gradle 8.13..."
+          wget -q https://services.gradle.org/distributions/gradle-8.13-bin.zip
+          unzip -q gradle-8.13-bin.zip
+          sudo mv gradle-8.13 /opt/gradle
+          sudo ln -sf /opt/gradle/bin/gradle /usr/bin/gradle
+          gradle --version
 
-      # ✅ إصلاح تضارب intl
       - name: Fix intl version conflict
         run: |
           if grep -q "intl: ^0.19.0" pubspec.yaml; then
@@ -86,10 +60,20 @@ jobs:
         run: flutter pub get
 
       - name: Build APK (release)
-        run: flutter build apk --release
+        run: |
+          cd android
+          gradle assembleRelease
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
 
       - name: Build App Bundle (release)
-        run: flutter build appbundle --release
+        run: |
+          cd android
+          gradle bundleRelease
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
