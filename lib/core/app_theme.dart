@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTheme {
@@ -157,7 +157,8 @@ class AppTheme {
         ),
       ),
       
-      cardTheme: CardTheme(
+      // ✅ التصحيح: تغيير CardTheme إلى CardThemeData
+      cardTheme: CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -165,7 +166,8 @@ class AppTheme {
         clipBehavior: Clip.antiAlias,
       ),
       
-      dialogTheme: DialogTheme(
+      // ✅ التصحيح: تغيير DialogTheme إلى DialogThemeData
+      dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
@@ -205,6 +207,7 @@ class AppTheme {
         bodyColor: AppColors.textLight,
         displayColor: AppColors.textLight,
       ),
+      // ✅ التصحيح: استخدام CardThemeData في darkTheme أيضاً
       cardTheme: base.cardTheme.copyWith(color: const Color(0xFF25253D)),
       appBarTheme: base.appBarTheme.copyWith(backgroundColor: const Color(0xFF25253D)),
     );
