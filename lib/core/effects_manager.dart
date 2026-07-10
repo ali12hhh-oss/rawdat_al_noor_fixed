@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -76,7 +76,8 @@ class EffectsManager {
             ),
           ).animate()
             .move(
-              begin: Offset(0, 0),
+              // ✅ التصحيح: استخدام Offset بدلاً من double
+              begin: Offset.zero,
               end: Offset(
                 (endX - startX) * 400,
                 (endY - startY) * 400,
@@ -130,8 +131,9 @@ class EffectsManager {
       style: TextStyle(fontSize: 80),
     ).animate()
       .scale(
-        begin: 0.5,
-        end: 1.2,
+        // ✅ التصحيح: استخدام Offset بدلاً من double
+        begin: const Offset(0.5, 0.5),
+        end: const Offset(1.2, 1.2),
         duration: 500.ms,
         curve: Curves.easeOutBack,
       )
@@ -260,8 +262,9 @@ class EffectsManager {
             style: TextStyle(fontSize: 100),
           ).animate()
             .scale(
-              begin: 0.5,
-              end: 1.5,
+              // ✅ التصحيح: استخدام Offset بدلاً من double
+              begin: const Offset(0.5, 0.5),
+              end: const Offset(1.5, 1.5),
               duration: 600.ms,
               curve: Curves.easeOutBack,
             )
@@ -287,8 +290,9 @@ class EffectsManager {
               ),
             ).animate()
               .scale(
-                begin: 0.5,
-                end: 1.2,
+                // ✅ التصحيح: استخدام Offset بدلاً من double
+                begin: const Offset(0.5, 0.5),
+                end: const Offset(1.2, 1.2),
                 duration: 500.ms,
                 curve: Curves.easeOutBack,
               )
@@ -318,8 +322,9 @@ class EffectsManager {
             style: TextStyle(fontSize: 80),
           ).animate()
             .scale(
-              begin: 0.5,
-              end: 1.2,
+              // ✅ التصحيح: استخدام Offset بدلاً من double
+              begin: const Offset(0.5, 0.5),
+              end: const Offset(1.2, 1.2),
               duration: 400.ms,
               curve: Curves.easeOutBack,
             )
@@ -345,8 +350,9 @@ class EffectsManager {
               ),
             ).animate()
               .scale(
-                begin: 0.5,
-                end: 1.1,
+                // ✅ التصحيح: استخدام Offset بدلاً من double
+                begin: const Offset(0.5, 0.5),
+                end: const Offset(1.1, 1.1),
                 duration: 400.ms,
                 curve: Curves.easeOutBack,
               )
