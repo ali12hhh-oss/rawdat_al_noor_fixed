@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +67,8 @@ class AudioProvider extends ChangeNotifier {
     if (!_isSoundEnabled) return;
     try {
       await _tts.setLanguage('ar');
-      await _tts.setVoice('ar-x-arb-network');
+      // ✅ التصحيح: استخدام Map بدلاً من String
+      await _tts.setVoice({'language': 'ar', 'name': 'ar-x-arb-network'});
       await _tts.speak(text);
     } catch (e) {
       try {
@@ -84,7 +85,8 @@ class AudioProvider extends ChangeNotifier {
     if (!_isSoundEnabled) return;
     try {
       await _tts.setLanguage('en');
-      await _tts.setVoice('en-us-x-sfg-local');
+      // ✅ التصحيح: استخدام Map بدلاً من String
+      await _tts.setVoice({'language': 'en', 'name': 'en-us-x-sfg-local'});
       await _tts.speak(text);
     } catch (e) {
       try {
