@@ -28,22 +28,59 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # ✅ إعداد Android SDK
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # ✅ إنشاء local.properties مع المسارين المطلوبين
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
           echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> android/local.properties
-          echo "✅ local.properties created with:"
+          echo "✅ local.properties created"
           cat android/local.properties
 
-      - name: Set up Gradle
+      # ✅ تثبيت Gradle واستخدامه لإنشاء Wrapper
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.13'
+
+      # ✅ إنشاء Gradle Wrapper من الصفر
+      - name: Create Gradle Wrapper
+        working-directory: android
+        run: |
+          echo "📦 Creating Gradle Wrapper..."
+          
+          # إنشاء مجلد wrapper إذا لم يكن موجوداً
+          mkdir -p gradle/wrapper
+          
+          # إنشاء ملف gradle-wrapper.properties
+          cat > gradle/wrapper/gradle-wrapper.properties << 'EOF'
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          EOF
+          
+          # تحميل gradle-wrapper.jar من الإنترنت
+          curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.13.0/gradle/wrapper/gradle-wrapper.jar
+          
+          # منح صلاحيات التنفيذ
+          chmod +x gradlew
+          
+          # التحقق
+          echo "📁 Files created:"
+          ls -la gradle/wrapper/
+
+      # ✅ إصلاح تضارب intl
+      - name: Fix intl version conflict
+        run: |
+          if grep -q "intl: ^0.19.0" pubspec.yaml; then
+            sed -i 's/intl: ^0.19.0/intl: ^0.20.2/g' pubspec.yaml
+            echo "✅ Updated intl to ^0.20.2"
+          else
+            echo "ℹ️ intl version is compatible"
+          fi
 
       - name: Install dependencies
         run: flutter pub get
